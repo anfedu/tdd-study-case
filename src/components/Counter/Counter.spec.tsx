@@ -1,22 +1,79 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import Counter from "./Counter";
+import user from "@testing-library/user-event";
 
-it("defaultCount=0, then counter=1", () => {
-  render(<Counter defaultCount={0} description="My Counter" />);
-  expect(screen.getByText("Current Count: 0")).toBeInTheDocument();
-  expect(screen.getByText(/my counter/i)).toBeInTheDocument();
-});
+describe("Counter", () => {
+  describe('Initialized with defaultCounter=10 and description="WWW"', () => {
+    beforeEach(() => {
+      render(<Counter defaultCount={10} description="WWW" />);
+    });
 
-it("defaultCount=0, and + clicked then counter = 1", () => {
-  render(<Counter defaultCount={0} description="My Counter" />);
-  fireEvent.click(screen.getByRole("button", { name: "Add to Counter" }));
-  expect(screen.getByText("Current Count: 1")).toBeInTheDocument();
-});
+    it("renders Current Count: 10", () => {
+      expect(screen.getByText("Current Count: 10")).toBeInTheDocument();
+    });
 
-it("defaultCount=0, and + clicked then counter = -1", () => {
-  render(<Counter defaultCount={0} description="My Counter" />);
-  fireEvent.click(
-    screen.getByRole("button", { name: "Subtract from Counter" })
-  );
-  expect(screen.getByText("Current Count: -1")).toBeInTheDocument();
+    it("renders title as 'WWW'", () => {
+      expect(screen.getByText(/WWW/)).toBeInTheDocument();
+    });
+
+    describe('when the incrementor change to 5 and "+" button is clicked', () => {
+      beforeEach(() => {
+        user.type(screen.getByLabelText(/Incrementor/), "{selectall}5");
+        user.click(screen.getByRole("button", { name: "Add to Counter" }));
+      });
+
+      it('renders "Current Count: 15"', () => {
+        expect(screen.getByText("Current Count: 15")).toBeInTheDocument();
+      });
+    });
+
+    describe('when the incrementor change to 25 and "-" button is clicked', () => {
+      beforeEach(() => {
+        user.type(screen.getByLabelText(/Incrementor/), "{selectall}25");
+        user.click(
+          screen.getByRole("button", { name: "Subtract from Counter" })
+        );
+      });
+
+      it('renders "Current Count: -15"', () => {
+        expect(screen.getByText("Current Count: -15")).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Initialized with defaultCounter=0 and description="My Counter"', () => {
+    beforeEach(() => {
+      render(<Counter defaultCount={0} description="My Counter" />);
+    });
+
+    it("renders Current Count: 0", () => {
+      expect(screen.getByText("Current Count: 0")).toBeInTheDocument();
+    });
+
+    it("renders title as 'My Counter'", () => {
+      expect(screen.getByText(/My Counter/)).toBeInTheDocument();
+    });
+
+    describe("when - is clicked", () => {
+      beforeEach(() => {
+        fireEvent.click(
+          screen.getByRole("button", { name: "Subtract from Counter" })
+        );
+      });
+
+      it("renders 'Current Count: -1'", () => {
+        expect(screen.getByText("Current Count: -1")).toBeInTheDocument();
+      });
+    });
+
+    describe("when + is clicked", () => {
+      beforeEach(() => {
+        fireEvent.click(screen.getByRole("button", { name: "Add to Counter" }));
+      });
+
+      it("renders 'Current Count: 1'", () => {
+        expect(screen.getByText("Current Count: 1")).toBeInTheDocument();
+      });
+    });
+  });
 });

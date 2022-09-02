@@ -14,9 +14,10 @@ function Counter({ description, defaultCount }: CounterProps) {
       <h2>
         DESC: {description} -- DC: {defaultCount}
       </h2>
-      <label htmlFor="">
-        Incrementor:{" "}
+      <label htmlFor="incrementor">
+        Incrementor:
         <input
+          id="incrementor"
           type="number"
           value={incrementor}
           onChange={(event) => {
@@ -27,7 +28,7 @@ function Counter({ description, defaultCount }: CounterProps) {
       <div style={{ marginTop: 20 }}>
         <button
           aria-label="Subtract from Counter"
-          onClick={() => setCount(count - 1)}
+          onClick={() => setCount(count - incrementor)}
           style={{
             background: "darkorange",
             borderRadius: "100%",
@@ -40,7 +41,7 @@ function Counter({ description, defaultCount }: CounterProps) {
         <span style={{ marginInline: 20 }}>Current Count: {count}</span>
         <button
           aria-label="Add to Counter"
-          onClick={() => setCount(count + 1)}
+          onClick={() => setCount(count + incrementor)}
           style={{
             background: "darkorange",
             borderRadius: "100%",
